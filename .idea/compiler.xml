@@ -12,7 +12,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="Lab6SpringMVC" options="-endorseddirs $PROJECT_DIR$/target/endorsed" />
+      <module name="Lab6SpringMVC" options="-endorseddirs C:\Users\yslog\Downloads\Lab6SpringMVC\Lab6SpringMVC\target/endorsed" />
     </option>
   </component>
 </project>
