@@ -63,7 +63,7 @@ public class movieController implements Controller {
 
         Movie newMovie = new Movie(title, actor, actress, genre, year);
         movieDao.insertMovie(newMovie);
-        return new ModelAndView("redirect:/movieController?action=list");
+        return new ModelAndView("redirect:/movieController.htm?action=list");
     }
 
     private ModelAndView searchMovieByTitle(HttpServletRequest request) throws SQLException {
