@@ -1,10 +1,11 @@
 package com.mycompany.lab6springmvc.util;
 
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 
 @Component
-@Scope("request")
+@Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class Part_9 {
 
     public String getMessage() {
