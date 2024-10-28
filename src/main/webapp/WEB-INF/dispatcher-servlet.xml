@@ -23,6 +23,10 @@ http://www.springframework.org/schema/context/spring-context.xsd">
 
     <!--    <bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping" />-->
 
+
+    <context:component-scan base-package="com.mycompany.lab6springmvc" />
+    <mvc:annotation-driven />
+
     <bean id="movieDao" class="com.mycompany.lab6springmvc.dao.MovieDao" />
 
     <bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping" />
@@ -36,6 +40,14 @@ http://www.springframework.org/schema/context/spring-context.xsd">
     <bean id="/part7_book" class="com.mycompany.lab6springmvc.controller.bookController">
         <property name="booksDao" ref="booksDao" />
     </bean>
+
+
+    <bean id="part7" class="com.mycompany.lab6springmvc.util.Part_7" scope="singleton" />
+    <bean id="/part7" class="com.mycompany.lab6springmvc.controller.Part_7_Controller">
+        <property name="part7" ref="part7" />
+    </bean>
+
+    <bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" />
 
 
     <bean id="viewResolver"
