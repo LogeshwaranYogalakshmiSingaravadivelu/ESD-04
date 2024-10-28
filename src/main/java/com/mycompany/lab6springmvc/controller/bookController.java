@@ -2,98 +2,83 @@ package com.mycompany.lab6springmvc.controller;
 
 import com.mycompany.lab6springmvc.dao.BooksDao;
 import com.mycompany.lab6springmvc.model.Books;
-import javax.servlet.RequestDispatcher;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.Controller;
+
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * bookController.java
- * This servlet acts as a page controller for the book application, handling all
- * requests from the user.
- */
-@WebServlet(name = "bookController", urlPatterns = {"/part7_book", "/part7_showForm", "/part7_insert", "/part7_list"})
-public class bookController extends HttpServlet {
+public class bookController implements Controller {
 
-    private static final long serialVersionUID = 1L;
     private BooksDao booksDao;
 
-    public void init() {
-        booksDao = new BooksDao();
+    public void setBooksDao(BooksDao booksDao) {
+        this.booksDao = booksDao;
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        doGet(request, response);
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String action = request.getServletPath();
+    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String action = request.getParameter("action");
 
         try {
+            if (action == null) {
+                return listBooks();
+            }
             switch (action) {
-                case "/part7_showForm":  // Show the form for adding a new book
-                    showBookForm(request, response);
-                    break;
-                case "/part7_insert":  // Insert a new book into the database
-                    insertBooks(request, response);
-                    break;
-                default:  // Default action: List all books
-                    listBooks(request, response);
-                    break;
+                case "showBookCount":
+                    return showBookCountForm();
+                case "showForm":
+                    return showBookForm(request);
+                case "insert":
+                    return insertBooks(request);
+                default:
+                    return listBooks();
             }
         } catch (SQLException ex) {
             throw new ServletException(ex);
         }
     }
 
-    private void listBooks(HttpServletRequest request, HttpServletResponse response)
-            throws SQLException, IOException, ServletException {
+    private ModelAndView showBookCountForm() {
+        return new ModelAndView("book-count");
+    }
+
+    private ModelAndView listBooks() throws SQLException {
         List<Books> listBooks = booksDao.selectAllBooks();
-        request.setAttribute("listBooks", listBooks);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("book-list.jsp");
-        dispatcher.forward(request, response);
+        ModelAndView modelAndView = new ModelAndView("book-list");
+        modelAndView.addObject("listBooks", listBooks);
+        return modelAndView;
     }
 
-    private void showBookForm(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        int count = Integer.parseInt(request.getParameter("count"));  // Get the number of books
-        request.setAttribute("count", count);  // Pass the count to the JSP page
-        RequestDispatcher dispatcher = request.getRequestDispatcher("book-form.jsp");
-        dispatcher.forward(request, response);  // Forward to the form with multiple input fields
+    private ModelAndView showBookForm(HttpServletRequest request) {
+        int count = Integer.parseInt(request.getParameter("count"));
+        ModelAndView modelAndView = new ModelAndView("book-form");
+        modelAndView.addObject("count", count);
+        return modelAndView;
     }
 
-
-    private void insertBooks(HttpServletRequest request, HttpServletResponse response)
-            throws SQLException, IOException {
+    private ModelAndView insertBooks(HttpServletRequest request) throws SQLException {
         String[] isbns = request.getParameterValues("isbn");
         String[] titles = request.getParameterValues("title");
         String[] authors = request.getParameterValues("authors");
         String[] prices = request.getParameterValues("price");
 
         List<Books> booksList = new ArrayList<>();
-
         for (int i = 0; i < isbns.length; i++) {
             String isbn = isbns[i];
             String title = titles[i];
             String author = authors[i];
             float price = Float.parseFloat(prices[i]);
-
             Books book = new Books(isbn, title, author, price);
             booksList.add(book);
         }
 
         booksDao.insertBooks(booksList);
-        response.sendRedirect("part7_list");
+        return new ModelAndView("redirect:/part7_book?action=list");
     }
 }

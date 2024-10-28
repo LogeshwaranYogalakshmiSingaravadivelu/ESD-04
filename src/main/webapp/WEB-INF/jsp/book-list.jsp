@@ -39,7 +39,7 @@
 </table>
 
 <!-- Link to add a new book -->
-<a href="book-count.jsp">Add New Book</a>
+<a href="${pageContext.request.contextPath}/part7_book?action=showBookCount">Add New Book</a>
 
 </body>
 </html>

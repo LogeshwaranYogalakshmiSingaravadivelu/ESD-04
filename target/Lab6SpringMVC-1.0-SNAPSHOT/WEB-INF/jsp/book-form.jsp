@@ -10,7 +10,7 @@
 <h2>Add <c:out value="${count}"/> Books</h2>
 
 <!-- Form to insert multiple books based on the count -->
-<form action="part7_insert" method="post">
+<form action="${pageContext.request.contextPath}/part7_book?action=insert" method="post">
     <c:forEach var="i" begin="1" end="${count}">
         <div class="book-entry">
             <h3>Book ${i}</h3>
@@ -32,7 +32,7 @@
     <button type="submit">Add Books</button>
 </form>
 
-<a href="${pageContext.request.contextPath}/part7_list">Back to Book List</a>
+<a href="${pageContext.request.contextPath}/part7_book?action=list">Back to Book List</a>
 
 </body>
 </html>

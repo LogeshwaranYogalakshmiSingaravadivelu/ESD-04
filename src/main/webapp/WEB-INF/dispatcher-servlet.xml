@@ -31,28 +31,11 @@ http://www.springframework.org/schema/context/spring-context.xsd">
     </bean>
 
 
-    <!--    SimpleUrlHandlerMapping-->
-<!--    <bean id="myController" class="com.mycompany.lab6springmvc.controller.MyController" />-->
-
-<!--    <bean id="defaultController" class="com.mycompany.lab6springmvc.controller.DefaultHandler" />-->
-
-<!--    <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">-->
-<!--        <property name="mappings">-->
-<!--            <props>-->
-<!--                <prop key="index.htm">defaultController</prop>-->
-<!--                <prop key="my.htm">myController</prop>-->
-<!--            </props>-->
-<!--        </property>-->
-<!--    </bean>-->
-
-<!--    <bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" />-->
-<!--    <bean id="/books.htm" class="com.mycompany.lab6springmvc.controller.MyController" />-->
-
-
-<!--    <bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping" />-->
-<!--    <bean class="com.mycompany.lab6springmvc.controller.UrlController" />-->
-
-
+    <bean id="booksDao" class="com.mycompany.lab6springmvc.dao.BooksDao" />
+    <bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" />
+    <bean id="/part7_book" class="com.mycompany.lab6springmvc.controller.bookController">
+        <property name="booksDao" ref="booksDao" />
+    </bean>
 
 
     <bean id="viewResolver"
