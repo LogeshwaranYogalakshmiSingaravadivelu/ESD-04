@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<h2>Message from Part_8</h2>
+<h2>Message from Part_7</h2>
 <p>${message}</p>
 
 <a href="${pageContext.request.contextPath}/part7_book?action=list">Back to Book List</a>
