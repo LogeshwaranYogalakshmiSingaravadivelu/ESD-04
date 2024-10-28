@@ -39,7 +39,7 @@
     </tr>
 </table>
 
-<a href="list">Back to Movie List</a>
+<a href="${pageContext.request.contextPath}/movieController.htm?action=list">Back to Movie List</a>
 
 </body>
 </html>

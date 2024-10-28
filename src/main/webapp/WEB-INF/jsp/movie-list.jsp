@@ -40,26 +40,29 @@
 </table>
 
 <h3>Search Movies</h3>
-<form action="searchByTitle" method="get">
+<form action="${pageContext.request.contextPath}/movieController.htm" method="get">
+    <input type="hidden" name="action" value="searchByTitle">
     <label for="title">Search by Title:</label>
     <input type="text" id="title" name="title" required>
     <button type="submit">Search</button>
 </form>
 
-<form action="searchByActor" method="get">
+<form action="${pageContext.request.contextPath}/movieController.htm" method="get">
+    <input type="hidden" name="action" value="searchByActor">
     <label for="actor">Search by Actor:</label>
     <input type="text" id="actor" name="actor" required>
     <button type="submit">Search</button>
 </form>
 
-<form action="searchByActress" method="get">
+<form action="${pageContext.request.contextPath}/movieController.htm" method="get">
+    <input type="hidden" name="action" value="searchByActress">
     <label for="actress">Search by Actress:</label>
     <input type="text" id="actress" name="actress" required>
     <button type="submit">Search</button>
 </form>
 
-<a href="new">Add New Movie</a>
-<a href="list">Back to Home</a>
+<a href="${pageContext.request.contextPath}/movieController.htm?action=new">Add New Movie</a>
+<a href="${pageContext.request.contextPath}/movieController.htm?action=list">Back to Home</a>
 </body>
 </html>
 

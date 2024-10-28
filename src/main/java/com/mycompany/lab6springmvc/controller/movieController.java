@@ -2,86 +2,59 @@ package com.mycompany.lab6springmvc.controller;
 
 import com.mycompany.lab6springmvc.model.Movie;
 import com.mycompany.lab6springmvc.dao.MovieDao;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.Controller;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
 
-
-/**
- * MovieServlet.java
- * This servlet acts as a page controller for the movie application, handling all
- * requests from the user.
- */
-
-@WebServlet("/")
-public class movieController extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+public class movieController implements Controller {
     private MovieDao movieDao;
 
-    public void init() {
-        movieDao = new MovieDao();
+    public void setMovieDao(MovieDao movieDao) {
+        this.movieDao = movieDao;
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        doGet(request, response);
-    }
+    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String action = request.getParameter("action");
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String action = request.getServletPath();
+        if (action == null) {
+            return listMovies();
+        }
 
-        try {
-            switch (action) {
-                case "/new":  // Show the form for adding a new movie
-                    showNewForm(request, response);
-                    break;
-                case "/insert":  // Insert a new movie into the database
-                    insertMovie(request, response);
-                    break;
-                case "/searchByTitle":  // Search movie by title
-                    searchMovieByTitle(request, response);
-                    break;
-                case "/searchByActor":  // Search movies by actor
-                    searchMoviesByActor(request, response);
-                    break;
-                case "/searchByActress":  // Search movies by actress
-                    searchMoviesByActress(request, response);
-                    break;
-                default:  // Default action: List all movies
-                    listMovies(request, response);
-                    break;
-            }
-        } catch (SQLException ex) {
-            throw new ServletException(ex);
+        switch (action) {
+            case "new":
+                return showNewForm();
+            case "insert":
+                return insertMovie(request);
+            case "searchByTitle":
+                return searchMovieByTitle(request);
+            case "searchByActor":
+                return searchMoviesByActor(request);
+            case "searchByActress":
+                return searchMoviesByActress(request);
+            default:
+                return listMovies();
         }
     }
 
-    private void listMovies(HttpServletRequest request, HttpServletResponse response)
-            throws SQLException, IOException, ServletException {
+    private ModelAndView listMovies() throws SQLException {
         List<Movie> listMovies = movieDao.selectAllMovies();
-        request.setAttribute("listMovies", listMovies);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("movie-list.jsp");
-        dispatcher.forward(request, response);
+        ModelAndView modelAndView = new ModelAndView("movie-list");
+        modelAndView.addObject("listMovies", listMovies);
+        return modelAndView;
     }
 
-    private void showNewForm(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("movie-form.jsp");
-        dispatcher.forward(request, response);
+    private ModelAndView showNewForm() {
+        return new ModelAndView("movie-form");
     }
 
-    private void insertMovie(HttpServletRequest request, HttpServletResponse response)
-            throws SQLException, IOException {
+    private ModelAndView insertMovie(HttpServletRequest request) throws SQLException {
         String title = request.getParameter("title");
         String actor = request.getParameter("actor");
         String actress = request.getParameter("actress");
@@ -90,35 +63,30 @@ public class movieController extends HttpServlet {
 
         Movie newMovie = new Movie(title, actor, actress, genre, year);
         movieDao.insertMovie(newMovie);
-        response.sendRedirect("list");
+        return new ModelAndView("redirect:/movieController?action=list");
     }
 
-
-    private void searchMovieByTitle(HttpServletRequest request, HttpServletResponse response)
-            throws SQLException, ServletException, IOException {
+    private ModelAndView searchMovieByTitle(HttpServletRequest request) throws SQLException {
         String title = request.getParameter("title");
         Movie movie = movieDao.selectMovieByTitle(title);
-        request.setAttribute("movie", movie);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("movie-details.jsp");
-        dispatcher.forward(request, response);
+        ModelAndView modelAndView = new ModelAndView("movie-details");
+        modelAndView.addObject("movie", movie);
+        return modelAndView;
     }
 
-    private void searchMoviesByActor(HttpServletRequest request, HttpServletResponse response)
-            throws SQLException, ServletException, IOException {
+    private ModelAndView searchMoviesByActor(HttpServletRequest request) throws SQLException {
         String actor = request.getParameter("actor");
         List<Movie> listMovies = movieDao.selectMoviesByActor(actor);
-        request.setAttribute("listMovies", listMovies);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("movie-list.jsp");
-        dispatcher.forward(request, response);
+        ModelAndView modelAndView = new ModelAndView("movie-list");
+        modelAndView.addObject("listMovies", listMovies);
+        return modelAndView;
     }
 
-    private void searchMoviesByActress(HttpServletRequest request, HttpServletResponse response)
-            throws SQLException, ServletException, IOException {
+    private ModelAndView searchMoviesByActress(HttpServletRequest request) throws SQLException {
         String actress = request.getParameter("actress");
         List<Movie> listMovies = movieDao.selectMoviesByActress(actress);
-        request.setAttribute("listMovies", listMovies);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("movie-list.jsp");
-        dispatcher.forward(request, response);
+        ModelAndView modelAndView = new ModelAndView("movie-list");
+        modelAndView.addObject("listMovies", listMovies);
+        return modelAndView;
     }
 }
-

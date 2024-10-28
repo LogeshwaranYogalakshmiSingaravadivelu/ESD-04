@@ -16,7 +16,9 @@
 
 <h2>Add New Movie</h2>
 
-<form action="insert" method="post">
+<form action="${pageContext.request.contextPath}/movieController.htm" method="post">
+  <input type="hidden" name="action" value="insert">
+
   <label for="title">Title:</label>
   <input type="text" id="title" name="title" required><br><br>
 
@@ -35,7 +37,7 @@
   <button type="submit">Add Movie</button>
 </form>
 
-<a href="list">Back to Movie List</a>
+<a href="${pageContext.request.contextPath}/movieController.htm?action=list">Back to Movie List</a>
 
 </body>
 </html>

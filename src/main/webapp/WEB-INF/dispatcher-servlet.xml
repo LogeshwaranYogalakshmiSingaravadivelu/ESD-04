@@ -17,14 +17,21 @@ http://www.springframework.org/schema/mvc/spring-mvc.xsd
 http://www.springframework.org/schema/context
 http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <mvc:annotation-driven />
-    <context:annotation-config />
-    <context:component-scan base-package="com.mycompany.lab6springmvc" />
+<!--    <mvc:annotation-driven />-->
+<!--    <context:annotation-config />-->
+<!--    <context:component-scan base-package="com.mycompany.lab6springmvc" />-->
 
     <!--    <bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping" />-->
 
+    <bean id="movieDao" class="com.mycompany.lab6springmvc.dao.MovieDao" />
 
-<!--    SimpleUrlHandlerMapping-->
+    <bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping" />
+    <bean id="movieController" class="com.mycompany.lab6springmvc.controller.movieController">
+        <property name="movieDao" ref="movieDao" />
+    </bean>
+
+
+    <!--    SimpleUrlHandlerMapping-->
 <!--    <bean id="myController" class="com.mycompany.lab6springmvc.controller.MyController" />-->
 
 <!--    <bean id="defaultController" class="com.mycompany.lab6springmvc.controller.DefaultHandler" />-->
