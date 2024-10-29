@@ -9,6 +9,5 @@
 <h2>Message from Part_9</h2>
 <p>${message}</p>
 
-<a href="${pageContext.request.contextPath}/part7_book?action=list">Back to Book List</a>
 </body>
 </html>
